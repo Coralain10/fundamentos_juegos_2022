@@ -1,5 +1,7 @@
 #pragma once
 #include <SDL/SDL.h>
+#include "Sprite.h"
+
 enum class GameState {
 	PLAY, EXIT
 };
@@ -14,6 +16,7 @@ private:
 	void update();
 	void draw();
 	void processInput();
+	Sprite sprite;
 public:
 	MainGame();
 	~MainGame();
