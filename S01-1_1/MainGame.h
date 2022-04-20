@@ -9,6 +9,7 @@ enum class GameState {
 class MainGame
 {
 private:
+	float time;
 	GLS_Program program;
 	int width;
 	int height;

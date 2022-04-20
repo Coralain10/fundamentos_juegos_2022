@@ -13,6 +13,7 @@ MainGame::~MainGame()
 
 void MainGame::init()
 {
+	time = 0.0f;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	window = SDL_CreateWindow("Hey!",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -57,6 +58,7 @@ void MainGame::initShaders()
 {
 	program.compileShaders("Shaders/colorShaderVert.vert", "Shaders/colorShaderFrag.frag");
 	program.addAtribute("vertexPosition");
+	program.addAtribute("vertexColor");
 	program.linkShader();
 }
 
@@ -67,6 +69,7 @@ void MainGame::update()
 	{
 		//dibujar pantalla y otros
 		processInput();
+		time += 0.002f;
 		draw();
 	}
 }
@@ -77,6 +80,9 @@ void MainGame::draw()
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	program.use();
+	// variable delta lo saca del shader
+	GLuint timeLocation = program.getUniformLocation("delta");
+	glUniform1f(timeLocation, time);
 	sprite.draw();
 	program.unuse();
 	SDL_GL_SwapWindow(window);
