@@ -27,6 +27,7 @@ void MainGame::init()
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	glClearColor(0.0f, 0.5f, 0.75f, 0.0f);
+	initShaders();
 }
 
 void MainGame::run()
@@ -52,6 +53,13 @@ void MainGame::processInput()
 	}
 }
 
+void MainGame::initShaders()
+{
+	program.compileShaders("Shaders/colorShaderVert.vert", "Shaders/colorShaderFrag.frag");
+	program.addAtribute("vertexPosition");
+	program.linkShader();
+}
+
 
 void MainGame::update()
 {
@@ -68,7 +76,8 @@ void MainGame::draw()
 {
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	program.use();
 	sprite.draw();
-	//Si hubiera un elemento en escena, lo dibuja
+	program.unuse();
 	SDL_GL_SwapWindow(window);
 }

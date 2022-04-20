@@ -48,14 +48,26 @@ void GLS_Program::compileShader(const string& shaderPath, GLuint id)
 
 void GLS_Program::addAtribute(const string& atributeName)
 {
+	//va a decirle al interprete que va a enviar cosas al shader
+	glBindAttribLocation(programID, numAtribute++, atributeName.c_str());
 }
 
 void GLS_Program::use()
 {
+	glUseProgram(programID);
+	for (int i = 0; i < numAtribute; i++)
+	{
+		glEnableVertexAttribArray(i);
+	}
 }
 
 void GLS_Program::unuse()
 {
+	glUseProgram(0);
+	for (int i = 0; i < numAtribute; i++)
+	{
+		glEnableVertexAttribArray(i);
+	}
 }
 
 void GLS_Program::compileShaders(const string& vertexShaderFilePath, const string& fragmentShaderFilePath)
@@ -85,7 +97,7 @@ void GLS_Program::linkShader()
 
 	glLinkProgram(programID);
 	GLint isLinked = 0;
-	glGetProgramiv(programID, GL_LINK_STATUS, (int*)isLinked);
+	glGetProgramiv(programID, GL_LINK_STATUS, (int*)&isLinked);
 	if (isLinked == GL_FALSE) {
 		GLint maxLenght = 0;
 		glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLenght);
