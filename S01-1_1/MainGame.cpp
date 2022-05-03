@@ -3,7 +3,8 @@
 #include "Error.h"
 #include <GL/glew.h>
 
-MainGame::MainGame() :window(nullptr), width(800), height(600), gameState(GameState::PLAY)
+//antes era width(800), height(600)
+MainGame::MainGame() :window(nullptr), width(640), height(640), gameState(GameState::PLAY)
 {
 }
 
@@ -27,14 +28,16 @@ void MainGame::init()
 		fatalError("No se pudo inicializar el GLEW");
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	glClearColor(0.0f, 0.5f, 0.75f, 0.0f);
+	//glClearColor(0.0f, 0.5f, 0.75f, 0.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	initShaders();
 }
 
 void MainGame::run()
 {
 	init();
-	sprite.init(-1, -1, 1, 1);
+	sprite.init(-1, -1, 1, 1, "Textures/texture1.png");
+	spriteTR.init(0, 0, 1, 1, "Textures/texture2.png");
 	update();
 }
 
@@ -59,6 +62,7 @@ void MainGame::initShaders()
 	program.compileShaders("Shaders/colorShaderVert.vert", "Shaders/colorShaderFrag.frag");
 	program.addAtribute("vertexPosition");
 	program.addAtribute("vertexColor");
+	program.addAtribute("vertexUV");
 	program.linkShader();
 }
 
@@ -80,10 +84,14 @@ void MainGame::draw()
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	program.use();
+	glActiveTexture(GL_TEXTURE0);
+	GLuint imageLocation = program.getUniformLocation("myImage");
+	glUniform1i(imageLocation, 0);
 	// variable delta lo saca del shader
 	GLuint timeLocation = program.getUniformLocation("delta");
 	glUniform1f(timeLocation, time);
 	sprite.draw();
+	spriteTR.draw();
 	program.unuse();
 	SDL_GL_SwapWindow(window);
 }

@@ -121,5 +121,5 @@ GLuint GLS_Program::getUniformLocation(const string& name)
 	if (location == GL_INVALID_INDEX) {
 		fatalError("No se encuentra la variable " + name);
 	}
-	return GLuint();
+	return location;
 }

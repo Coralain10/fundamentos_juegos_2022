@@ -21,6 +21,7 @@ private:
 	void processInput();
 	void initShaders();
 	Sprite sprite;
+	Sprite spriteTR;
 public:
 	MainGame();
 	~MainGame();
